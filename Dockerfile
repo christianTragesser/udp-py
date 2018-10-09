@@ -6,10 +6,11 @@ RUN addgroup -S -g 2222 udp && \
     
 COPY *.py /opt/
 
-RUN chmod 755 -R /opt
+RUN chmod 755 -R /opt && \
+    ln -s /opt/send.py /usr/local/bin/send
 
 USER udp
 
 EXPOSE 5000:5000/udp
 
-CMD ["/bin/sh", "-c", "python -u /opt/receiver.py"]
+CMD ["/bin/sh", "-c", "python -u /opt/receive.py"]
