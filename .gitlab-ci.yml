@@ -1,0 +1,20 @@
+image: registry.gitlab.com/christiantragesser/dind-py:3
+
+variables:
+    DOCKER_DRIVER: overlay2
+    EXT_TAG: $CI_REGISTRY/christiantragesser/udp-py
+    
+services:
+- docker:stable-dind
+
+stages:
+  - build
+
+test:
+  stage: build
+  script:
+    - docker build -t $EXT_TAG .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push ${EXT_TAG}:latest | grep -e "The push refers to" -e latest
+  only:
+    - master
